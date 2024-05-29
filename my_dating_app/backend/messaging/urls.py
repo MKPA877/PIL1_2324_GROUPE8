@@ -1,11 +1,5 @@
 from django.urls import path
-from . import consumers
 from .views import ConversationListView, ConversationCreateView, ConversationDetailView, MessageCreateView
-
-websocket_urlpatterns = [
-    path('ws/chat/', consumers.ChatConsumer.as_asgi()),
-
-]
 
 urlpatterns = [
     path('conversations/', ConversationListView.as_view(), name='conversation_list'),

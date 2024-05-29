@@ -6,9 +6,7 @@ It exposes the ASGI callable as a module-level variable named ``application``.
 For more information on this file, see
 https://docs.djangoproject.com/en/5.0/howto/deployment/asgi/
 """
-"""Ici il faut configurer 
-les protocoles que l'application Django doit gérer, notamment les requêtes HTTP et les connexions WebSocket.
-"""
+
 import os
 import django
 from channels.routing import ProtocolTypeRouter, URLRouter
@@ -37,4 +35,3 @@ application = ProtocolTypeRouter({
         )
     ),
 })
-
