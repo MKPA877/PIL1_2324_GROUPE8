@@ -1,0 +1,114 @@
+<!-- templates/chat/chat.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion</title>
+    <style>
+        /* CSS pour styliser la discussion */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .messages {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .message.me {
+            background-color: #dcf8c6;
+            text-align: right;
+        }
+        .message.them {
+            background-color: #f1f0f0;
+            text-align: left;
+        }
+        .message-form {
+            margin-top: 20px;
+            display: flex;
+        }
+        .message-form textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .message-form button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages" id="chat-messages">
+            {% for message in messages %}
+                <div class="message {% if message.sender == request.user %}me{% else %}them{% endif %}">
+                    <p>{{ message.content }}</p>
+                    <small>{{ message.timestamp }}</small>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="message-form">
+            <textarea id="message-input"></textarea>
+            <button id="send-button">Envoyer</button>
+        </div>
+    </div>
+
+    <script>
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/{{ conversation.id }}/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const message = data.message;
+            const sender = data.sender;
+            const timestamp = data.timestamp;
+
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            if (sender === "{{ request.user.username }}") {
+                messageElement.classList.add('me');
+            } else {
+                messageElement.classList.add('them');
+            }
+            messageElement.innerHTML = `<p>${message}</p><small>${timestamp}</small>`;
+
+            document.getElementById('chat-messages').appendChild(messageElement);
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.getElementById('send-button').onclick = function(e) {
+            const messageInputDom = document.getElementById('message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+</body>
+</html>

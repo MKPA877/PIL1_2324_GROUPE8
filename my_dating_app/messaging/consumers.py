@@ -10,16 +10,35 @@ from datetime import datetime
 class ChatConsumer(AsyncWebsocketConsumer):
     async def consumer_connect(self):  #
         # Gérer la connexion du client
-        self.sender_id = self.scope['url_route']['kwargs']['sender_id']
-        self.recipient_id = self.scope['url_route']['kwargs']['recipient_id']
-        self.room_name = f'chat_{self.sender_id}_{self.recipient_id}'
+        self.sender_id = self.scope['url_route']['kwargs']['sender_id']  # Extrait l'identifiant de l'expéditeur et des arguments de la route url
+        self.recipient_id = self.scope['url_route']['kwargs']['recipient_id']  # Extrait l'identifiant de destinataire et des arguments de la routes url
+        self.room_name = f'chat_{self.sender_id}_{self.recipient_id}'   # Crée un nom de salle de chat unique au récepteur et au destinataire
 
         await self.channel_layer.group_add(
             self.room_name,
             self.channel_name
-        )
+        )  # Ajoute le canal actuel à un groupe nommé après la salle de chat
 
         await self.accept()
+
+        # Récupérer les messages non lus
+        unread_messages = Message.objects.filter(
+            recipient_id=self.sender_id,
+            sender_id=self.recipient_id,
+            is_read=False
+        )
+
+        for message in unread_messages:
+            await self.send(text_data=json.dumps({
+                'message': message.content,
+                'sender_id': message.sender_id,
+                'recipient_id': message.recipient_id,
+                'timestamp': message.timestamp.isoformat()
+            }))
+        
+        # Marquer les messages comme lus
+        message.is_read = True
+        message.save()
 
     async def consumer_disconnect(self, close_code):
         # Gérer la déconnexion du client
