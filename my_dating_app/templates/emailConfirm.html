@@ -1,0 +1,7 @@
+{% autoescape off %}
+Bienvenu sur "le nom de l'appli"
+Bonjour{{ name }}
+Confirmez votre addresse email en cliquant sur le lien suivant
+
+lien: https//{{domain}}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}

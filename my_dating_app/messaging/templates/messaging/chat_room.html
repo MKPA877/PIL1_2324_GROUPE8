@@ -76,7 +76,7 @@
 
     <script>
         const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/{{ conversation.id }}/'
+            'ws://' + window.location.host + '/ws/chat/{{sender.id}/{recipient.id}}/'
         );
 
         chatSocket.onmessage = function(e) {
@@ -98,7 +98,7 @@
         };
 
         chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
+            console.error('Chat socket closed !');
         };
 
         document.getElementById('send-button').onclick = function(e) {

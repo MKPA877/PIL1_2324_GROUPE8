@@ -11,7 +11,20 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+
+import django.utils
+import django.utils.encoding
+from info import *
+import django
+from django.utils.encoding import force_str
+django.utils.encoding.force_text = force_str
 import os
+
+EMAILS_USE_TLS = EMAILS_USE_TLS
+EMAIL_HOST = EMAIL_HOST
+EMAIL_HOST_USER = EMAIL_HOST_PASSWORD
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = EMAIL_PORT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -66,7 +79,7 @@ ROOT_URLCONF = "my_dating_app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ['templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -112,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "fr"
 
 TIME_ZONE = "UTC"
 
