@@ -33,7 +33,7 @@ const Stack = createNativeStackNavigator()
 
 function App() {
 
-  const [initialized] = useState(false)
+  const [initialized] = useState(true)
   const [authenticated] = useState(false )
   return (
     <NavigationContainer theme={lightTheme}>
