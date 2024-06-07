@@ -10,7 +10,8 @@ function Title({ text, color }) {
                 color: color,
                 textAlign: 'center',
                 fontSize: 48,
-                fontFamily: 'RobotoSlab-VariableFont_wght'
+                fontFamily: 'RobotoSlab-VariableFont_wght',
+                marginBottom: 30
             }}
         >
             { text }

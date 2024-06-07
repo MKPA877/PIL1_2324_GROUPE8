@@ -1,4 +1,4 @@
-import { SafeAreaView, Text } from "react-native"
+import { SafeAreaView, Text, TouchableOpacity, View, Image } from "react-native"
 import { useLayoutEffect} from "react"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -26,6 +26,13 @@ function HomeScreen ({navigation}) {
     return (
         <Tab.Navigator
         screenOptions={({ route, navigation })=> ({
+            headerLeft:() => {
+                <View style={{marginLeft: 16}}> 
+                    <Image source={require('../assets/profile.png')}
+                    style={{width: 28, height: 28,  borderRadius: 14, backgroundColor: '#e0e0e0'}}
+                    />
+                </View>
+            },
             headerRight:() => {
                 <TouchableOpacity>
                   <FontAwesomeIcon 

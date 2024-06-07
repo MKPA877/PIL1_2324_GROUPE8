@@ -3,15 +3,28 @@ import React, { useState } from 'react'
 import {
   SafeAreaView, StatusBar, Text,
 } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+
+import './src/core/fontawesome'
+
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import SplashScreen from './src/screens/Splash'
-import SignInScreen from './src/screens/SignIn'
+import SignInScreen from './src/screens/SignIn' 
 import HomeScreen from './src/screens/Home'
 import SearchScreen from './src/screens/Search'
 import MessagesScreen from './src/screens/Messages'
 import SignUpScreen from './src/screens/SignUp'
+
+
+
+const lightTheme = {
+  ...DefaultTheme,
+  colors:{
+    ...DefaultTheme.colors,
+    background:'white'
+  }
+}
 
 
 
@@ -23,7 +36,7 @@ function App() {
   const [initialized] = useState(false)
   const [authenticated] = useState(false )
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={lightTheme}>
       <StatusBar barStyle='dark-context' />
       <Stack.Navigator>
         {!initialized ?(
