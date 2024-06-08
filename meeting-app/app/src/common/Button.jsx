@@ -7,7 +7,7 @@ function Button({title}) {
     return (
         <TouchableOpacity
         style={{
-            backgroudColor: '#202020'
+            backgroudColor: '#202020',
             height: 52,
             borderRadius: 26,
             alignItems: 'center',
