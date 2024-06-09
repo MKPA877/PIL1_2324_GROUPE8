@@ -69,7 +69,7 @@ function SignUpScreen({ navigation }) {
 			return
 		}
 
-		// Make signin request
+		// Make signup request
 		api({
 			method: 'POST',
 			url: '/chat/signup/',
