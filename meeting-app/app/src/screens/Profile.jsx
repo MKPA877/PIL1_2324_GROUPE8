@@ -8,25 +8,25 @@ import Thumbnail from "../common/Thumbnail"
 
 
 
+
 function ProfileImage() {
 	const uploadThumbnail = useGlobal(state => state.uploadThumbnail)
 	const user = useGlobal(state => state.user)
-
 	return (
 		<TouchableOpacity 
 			style={{ marginBottom: 20 }}
 			onPress={() => {
 				launchImageLibrary({ includeBase64: true }, (response) => {
-					//utils.log('launchImageLibrary', response)
+					utils.log('launchImageLibrary', response)
 					if (response.didCancel) return
 					const file = response.assets[0]
 					uploadThumbnail(file)
 				})
 			}}
 		>
-			<Thumbnail
-				url={user.thumbnail}
-				size={180}
+			<Image
+			source={required('../assets/profile.png')}
+			style={{width: 180, height:180, border-Radius: 90, backgroundColor: '#e0e0e0'}}
 			/>
 			<View
 				style={{
@@ -100,10 +100,9 @@ function ProfileScreen() {
 				paddingTop: 100
 			}}
 		>
-			<Image
-				source={require('../asssets/profile.png')}
-				style={{width:180, height: 180, broderRadius:90, backgroundColor: '#e0e0e0', marginBottom: 20}}
-			/>
+			<ProfileImage/>
+
+			
 
 			<Text 
 				style={{
