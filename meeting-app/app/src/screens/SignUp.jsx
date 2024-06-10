@@ -82,6 +82,8 @@ function SignUpScreen({ navigation }) {
 		})
 		.then(response => {
 			utils.log('Sign Up:', response.data)
+
+			login(response.data)
 			
 			const credentials = {
 				username: username,

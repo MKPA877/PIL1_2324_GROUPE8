@@ -90,7 +90,6 @@ function ProfileLogout() {
 }
 
 
-
 function ProfileScreen() {
 	const user = useGlobal(state => state.user)
 	return (
@@ -101,7 +100,10 @@ function ProfileScreen() {
 				paddingTop: 100
 			}}
 		>
-			<ProfileImage />
+			<Image
+				source={require('../asssets/profile.png')}
+				style={{width:180, height: 180, broderRadius:90, backgroundColor: '#e0e0e0', marginBottom: 20}}
+			/>
 
 			<Text 
 				style={{

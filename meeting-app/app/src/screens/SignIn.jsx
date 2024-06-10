@@ -61,6 +61,7 @@ function SignInScreen({ navigation }) {
 		})
 		.then(response => {
 			utils.log('Sign In:', response.data)
+			login (response.data)
 			
 			const credentials = {
 				username: username,

@@ -16,6 +16,8 @@ import SearchScreen from './src/screens/Search'
 import MessagesScreen from './src/screens/Messages'
 import SignUpScreen from './src/screens/SignUp'
 
+import useGlobal from './src/core/global'
+
 
 
 const lightTheme = {
@@ -34,7 +36,8 @@ const Stack = createNativeStackNavigator()
 function App() {
 
   const [initialized] = useState(true)
-  const [authenticated] = useState(false )
+  const authenticated = useGlobal(state => state.authenticated)
+
   return (
     <NavigationContainer theme={lightTheme}>
       <StatusBar barStyle='dark-context' />
