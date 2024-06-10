@@ -61,17 +61,16 @@ function SignInScreen({ navigation }) {
 		})
 		.then(response => {
 			utils.log('Sign In:', response.data)
-			login (response.data)
-			
 			const credentials = {
 				username: username,
-				password: password
+				password: password,
 			}
-			login(
-				credentials, 
-				response.data.user,
-				response.data.tokens
+			
+			login (
+				credentails, 
+				response.data.user
 			)
+			
 		})
 		.catch(error => {
 			if (error.response) {
