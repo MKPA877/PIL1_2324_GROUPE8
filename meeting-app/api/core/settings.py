@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-!ef&t%(t$hb-=t_43+q3ru%&=k03!a$1b0o6ev0xyybs$pxv(a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '10.0.2.2']
 
 
 AUTH_USER_MODEL = 'chat.User'
@@ -37,10 +37,31 @@ REST_FRAMEWORK = {
     )
 }
 
+# Thumbnail uploads
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+#Daphne
+ASGI_APPLICATION ='core.asgi.application'
+
+#Channels
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)]
+        }
+    }
+}
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'rest_framework',
+    'rest_framework_simplejwt',
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -50,6 +71,7 @@ INSTALLED_APPS = [
     "chat",
     "rest_framework_simplejwt",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

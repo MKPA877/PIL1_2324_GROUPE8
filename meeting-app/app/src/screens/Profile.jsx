@@ -17,16 +17,16 @@ function ProfileImage() {
 			style={{ marginBottom: 20 }}
 			onPress={() => {
 				launchImageLibrary({ includeBase64: true }, (response) => {
-					utils.log('launchImageLibrary', response)
+					//utils.log('launchImageLibrary', response)
 					if (response.didCancel) return
 					const file = response.assets[0]
 					uploadThumbnail(file)
 				})
 			}}
 		>
-			<Image
-			source={required('../assets/profile.png')}
-			style={{width: 180, height:180, border-Radius: 90, backgroundColor: '#e0e0e0'}}
+			<Thumbnail
+				url={user.thumbnail}
+				size={180}
 			/>
 			<View
 				style={{
