@@ -61,16 +61,16 @@ function SignInScreen({ navigation }) {
 		})
 		.then(response => {
 			utils.log('Sign In:', response.data)
+			
 			const credentials = {
 				username: username,
-				password: password,
+				password: password
 			}
-			
-			login (
-				credentails, 
-				response.data.user
+			login(
+				credentials, 
+				response.data.user,
+				response.data.tokens
 			)
-			
 		})
 		.catch(error => {
 			if (error.response) {
@@ -137,4 +137,4 @@ function SignInScreen({ navigation }) {
 	)
 }
 
-export default SignInScreen 
+export default SignInScreen

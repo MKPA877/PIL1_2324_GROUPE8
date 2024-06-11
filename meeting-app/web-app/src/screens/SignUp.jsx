@@ -69,7 +69,7 @@ function SignUpScreen({ navigation }) {
 			return
 		}
 
-		// Make signup request
+		// Make signin request
 		api({
 			method: 'POST',
 			url: '/chat/signup/',
@@ -82,6 +82,7 @@ function SignUpScreen({ navigation }) {
 		})
 		.then(response => {
 			utils.log('Sign Up:', response.data)
+			
 			const credentials = {
 				username: username,
 				password: password1

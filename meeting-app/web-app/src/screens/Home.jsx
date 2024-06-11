@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect } from "react"
 import { SafeAreaView, Text, TouchableOpacity, View, Image } from "react-native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import RequestsScreen from "./Requests"
 import FriendsScreen from "./Friends"

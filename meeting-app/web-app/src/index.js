@@ -1,13 +1,17 @@
-// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppRegistry } from 'react-native';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { name as appName } from './app.json';  // Assurez-vous que app.json contient le nom de votre application
+import appConfig from './app.json';  
 
+// Utilisez la propriété name de l'objet app.json
+const { name: appName } = appConfig;
+
+// Enregistrez le composant racine de votre application avec AppRegistry
 AppRegistry.registerComponent(appName, () => App);
 
+// Définissez le WrapperComponent comme BrowserRouter
 const rootTag = document.getElementById('root');
 AppRegistry.runApplication(appName, {
   initialProps: {},
