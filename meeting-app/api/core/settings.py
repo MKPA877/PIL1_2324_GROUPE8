@@ -25,7 +25,8 @@ SECRET_KEY = "django-insecure-!ef&t%(t$hb-=t_43+q3ru%&=k03!a$1b0o6ev0xyybs$pxv(a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '10.0.2.2']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 
 AUTH_USER_MODEL = 'chat.User'
@@ -69,7 +70,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "chat",
-    "rest_framework_simplejwt",
 ]
 
 

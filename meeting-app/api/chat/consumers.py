@@ -1,7 +1,7 @@
 import base64
 import json
 
-from asgiref.sync import async_to_sinc
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
 

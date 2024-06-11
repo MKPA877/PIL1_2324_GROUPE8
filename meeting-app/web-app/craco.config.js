@@ -1,4 +1,4 @@
-// craco.config.js
+const path = require('path');
 const { getLoader, loaderByName } = require('@craco/craco');
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
       if (isFound) {
         match.loader.include = [
           ...match.loader.include,
-          /node_modules\/react-native-web/,
+          path.resolve(__dirname, 'node_modules/react-native-web'), // Utilisez path.resolve pour obtenir un chemin absolu
         ];
       }
       return webpackConfig;
