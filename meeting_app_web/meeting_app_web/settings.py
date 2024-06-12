@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
+#from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,6 +27,14 @@ SECRET_KEY = "django-insecure-=vm3r373g(9syjcs9)c57&83oj&gk6t79rz8la_6me62(*n$h!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+AUTH_USER_MODEL = 'app.User'
+
+
+
+LOGIN_REDIRECT_URL = '/'  # Rediriger l'utilisateur après la connexion
+LOGIN_URL = '/login/'     # Définir l'URL de connexion
 
 
 # Application definition
@@ -54,7 +63,7 @@ ROOT_URLCONF = "meeting_app_web.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'app', 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
