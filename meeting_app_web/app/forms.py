@@ -1,10 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import *
 
 class SignUpForm(UserCreationForm):
     nom = forms.CharField(max_length=30, required=True)
     prenom = forms.CharField(max_length=30, required=True)
+    username = forms.CharField(max_length=30, required=True)
     SEXE_CHOICES = (
         ('M', 'Masculin'),
         ('F', 'Féminin'),
@@ -26,3 +28,7 @@ class LoginForm(forms.Form):
 
 
 
+class PreferenceForm(forms.ModelForm):
+    class Meta:
+        model = CentresDInteret
+        fields = ['Sport', 'Musique', 'Voyage', 'Technologie', 'Lecture', 'Cinéma']

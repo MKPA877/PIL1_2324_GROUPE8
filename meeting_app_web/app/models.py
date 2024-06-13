@@ -2,17 +2,18 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-def upload_profile_picture(instance, filename):
+"""def upload_profile_picture(instance, filename):
     path = f'profile_pictures/{instance.username}'
     extension = filename.split('.')[-1]
     if extension:
         path = path + '.' + extension
-    return path
+    return path"""
 
 
 class User(AbstractUser):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    #username = models.CharField(max_length=30)
     gender_choices = [
         ('M', 'Male'),
         ('F', 'Female'),
@@ -24,7 +25,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
     profile_picture = models.ImageField(
-        upload_to=upload_profile_picture,
+        upload_to="images/profile_pictures/",
         null=True,
         blank=True
     )
@@ -85,8 +86,9 @@ class CentresDInteret(models.Model):
     musique = models.BooleanField(default=False)
     lecture = models.BooleanField(default=False)
     voyage = models.BooleanField(default=False)
-    couleur = models.BooleanField(default=False)
+    cinema = models.BooleanField(default=False)
     technologie = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Centres d\'intérêt de {self.user.username}'
+    

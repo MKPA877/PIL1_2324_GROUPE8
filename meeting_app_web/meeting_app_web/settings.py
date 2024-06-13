@@ -40,6 +40,7 @@ LOGIN_URL = '/login/'     # Définir l'URL de connexion
 # Application definition
 
 INSTALLED_APPS = [
+    "app",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -85,7 +86,7 @@ WSGI_APPLICATION = "meeting_app_web.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
