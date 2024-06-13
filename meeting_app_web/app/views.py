@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 #from django.contrib.auth.forms import  Custom
 from django.contrib import messages
-from .forms import SignUpForm,LoginForm
+from .forms import *
+from .models import *
+from .utils import *
 
 def login_view(request):
     if request.method == 'POST':
@@ -35,3 +38,23 @@ def signup_view(request):
     else:
         form = SignUpForm()
     return render(request, 'inscription.html', {'form': form})
+
+
+@login_required
+def preference_view(request):
+    if request.method == 'POST':
+        form = PreferenceForm(request.POST, instance=request.user.preference)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Vos préférances ont été enregistrées avec succès!')
+            return redirect('preferences')
+    else:
+        form = PreferenceForm(instance=request.user.preference)
+    return render(request, 'preferences.html', {'form': form})
+
+
+@login_required
+def compatible_profiles(request):
+    user = request.user
+    compatible_users = find_compatible_users(user)
+    return render(request, 'compatible_profils.html', {'compatible_users': compatible_users})
