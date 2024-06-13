@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-#from django.contrib.auth.forms import  Custom
+from django.db.models import Q
 from django.contrib import messages
 from .forms import *
 from .models import *
 from .utils import *
+
+
+
+def index_view(request):
+    return render(request, 'index.html')
 
 def login_view(request):
     if request.method == 'POST':
@@ -40,7 +45,7 @@ def signup_view(request):
     return render(request, 'inscription.html', {'form': form})
 
 
-@login_required
+#@login_required
 def preference_view(request):
     if request.method == 'POST':
         form = PreferenceForm(request.POST, instance=request.user.preference)
