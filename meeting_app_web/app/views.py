@@ -1,11 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-#from django.contrib.auth.forms import  Custom
+from django.db.models import Q
 from django.contrib import messages
 from .forms import *
 from .models import *
 from .utils import *
+from .models import UserProfile, Friendship
+
+
+
+def index_view(request):
+    return render(request, 'index.html')
 
 def login_view(request):
     if request.method == 'POST':
@@ -40,7 +46,7 @@ def signup_view(request):
     return render(request, 'inscription.html', {'form': form})
 
 
-@login_required
+#@login_required
 def preference_view(request):
     if request.method == 'POST':
         form = PreferenceForm(request.POST, instance=request.user.preference)
@@ -58,3 +64,22 @@ def compatible_profiles(request):
     user = request.user
     compatible_users = find_compatible_users(user)
     return render(request, 'compatible_profils.html', {'compatible_users': compatible_users})
+
+# Vues pour les suggestions d'amis en fonction du sexe opposé
+def suggestions_view(request):
+    user_profile = request.user.userprofile
+    
+    #récupération de tous les profils d'utilisateurs de sexe opposé
+    opposite_profiles = UserProfile.objects.exclude(user=request.user), filter(user__gender='opposé')
+
+    suggestions = []
+
+    for profile in opposite_profiles:
+        common_percentage = calculate_common_percentage(user_profile, profile)
+        suggestions.append((profile, common_percentage))
+
+    # Triage des suggestions par pourcentage de points communs(ordre décroissant)
+    suggestions = sorted(suggestions, key=lambda x: x[1], reverse=True)
+
+    return render(request, 'suggestions.html', {'suggestions': suggestions})
+

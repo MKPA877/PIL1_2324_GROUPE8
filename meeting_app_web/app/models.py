@@ -91,4 +91,14 @@ class CentresDInteret(models.Model):
 
     def __str__(self):
         return f'Centres d\'intérêt de {self.user.username}'
-    
+
+
+# Modèle gérant les relations d'amitié ainsi que les pourcentage
+class Friendship(models.Model):
+    User1 = models.ForeignKey(UserProfile, related_name='friends', on_delete=models.CASCADE)
+    User2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    common_percentage = models.FloatField()
+
+    def __str__(self):
+        return f"{self.User1, User.username} <-> {self.User2, User.username}"
+
