@@ -128,10 +128,13 @@ def private_chat_redirect(request, user_id):
     if not chat:
         chat = PrivateChat.objects.create(user1=user1, user2=user2)
     
-    return redirect('chatroom', chatroom_name=f'private_{chat.id}')
+    return redirect('chat_room', chat_id=chat.id)
 
 
 # Vue pour rendre la page de chat
 @login_required
 def chat_room(request, chat_id):
-    return render(request, 'chat_room.html', {'chat_id': chat_id})
+    # Recherche de la salle de chat en fonction de l'identifiant donné
+    chat = get_object_or_404(PrivateChat, id=chat_id)
+    
+    return render(request, 'chat_room.html', {'chat_id': chat.id})
