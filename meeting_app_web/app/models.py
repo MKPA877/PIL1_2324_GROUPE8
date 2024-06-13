@@ -2,13 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-"""def upload_profile_picture(instance, filename):
-    path = f'profile_pictures/{instance.username}'
-    extension = filename.split('.')[-1]
-    if extension:
-        path = path + '.' + extension
-    return path"""
-
 
 class User(AbstractUser):
     first_name = models.CharField(max_length=30)
@@ -91,4 +84,26 @@ class CentresDInteret(models.Model):
 
     def __str__(self):
         return f'Centres d\'intérêt de {self.user.username}'
-    
+
+
+# Modèle gérant les relations d'amitié ainsi que les pourcentage
+class Friendship(models.Model):
+    User1 = models.ForeignKey(User, related_name='friends', on_delete=models.CASCADE)
+    User2 = models.ForeignKey(User, on_delete=models.CASCADE)
+    common_percentage = models.FloatField()
+
+    def __str__(self):
+        return f"{self.User1, User.username} <-> {self.User2, User.username}"
+
+
+
+# Modèle pour les salles de chat
+
+class PrivateChat(models.Model):
+    user1 = models.ForeignKey(User, related_name='user1_chats', on_delete=models.CASCADE)
+    user2 = models.ForeignKey(User, related_name='user2_chats', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Chat between {self.user1.username} and {self.user2.username}'
+
