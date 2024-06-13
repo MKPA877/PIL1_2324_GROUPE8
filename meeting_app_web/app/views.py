@@ -58,3 +58,23 @@ def compatible_profiles(request):
     user = request.user
     compatible_users = find_compatible_users(user)
     return render(request, 'compatible_profils.html', {'compatible_users': compatible_users})
+
+
+@login_required
+def conversations_view(request):
+    user = request.user
+    connections = Connection.objects.filter(
+        (Q(sender=user) | Q(receiver=user)) & Q(accepted=True)
+    ).distinct()
+
+    context = []
+    for connection in connections:
+        last_message = connection.messages.order_by('-date_envoi').first()
+        other_participant = connection.receiver if connection.sender == user else connection.sender
+        context.append({
+            'connection': connection,
+            'last_message': last_message,
+            'other_participant': other_participant,
+        })
+
+    return render(request, 'conversations.html', {'conversations': context})
