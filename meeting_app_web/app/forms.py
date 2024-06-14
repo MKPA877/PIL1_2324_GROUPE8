@@ -31,4 +31,4 @@ class LoginForm(forms.Form):
 class PreferenceForm(forms.ModelForm):
     class Meta:
         model = CentresDInteret
-        fields = ['Sport', 'Musique', 'Voyage', 'Technologie', 'Lecture', 'Cinéma']
+        fields = ['sport', 'musique', 'voyage', 'technologie', 'lecture', 'cinema']

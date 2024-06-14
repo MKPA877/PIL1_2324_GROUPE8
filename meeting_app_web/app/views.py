@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
@@ -6,7 +6,12 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 from .utils import *
-from .models import UserProfile, Friendship
+
+
+
+
+def index_view(request):
+    return render(request, 'index.html')
 
 
 
@@ -46,7 +51,7 @@ def signup_view(request):
     return render(request, 'inscription.html', {'form': form})
 
 
-#@login_required
+@login_required
 def preference_view(request):
     if request.method == 'POST':
         form = PreferenceForm(request.POST, instance=request.user.preference)
@@ -65,12 +70,33 @@ def compatible_profiles(request):
     compatible_users = find_compatible_users(user)
     return render(request, 'compatible_profils.html', {'compatible_users': compatible_users})
 
+
+@login_required
+def conversations_view(request):
+    user = request.user
+    connections = Connection.objects.filter(
+        (Q(sender=user) | Q(receiver=user)) & Q(accepted=True)
+    ).distinct()
+
+    context = []
+    for connection in connections:
+        last_message = connection.messages.order_by('-date_envoi').first()
+        other_participant = connection.receiver if connection.sender == user else connection.sender
+        context.append({
+            'connection': connection,
+            'last_message': last_message,
+            'other_participant': other_participant,
+        })
+    return render(request, 'conversations.html', {'conversations': context})
+
+
+
 # Vues pour les suggestions d'amis en fonction du sexe opposé
 def suggestions_view(request):
     user_profile = request.user.userprofile
     
     #récupération de tous les profils d'utilisateurs de sexe opposé
-    opposite_profiles = UserProfile.objects.exclude(user=request.user), filter(user__gender='opposé')
+    opposite_profiles = User.objects.exclude(user=request.user), filter(user__gender='opposé')
 
     suggestions = []
 
@@ -83,3 +109,32 @@ def suggestions_view(request):
 
     return render(request, 'suggestions.html', {'suggestions': suggestions})
 
+
+
+# Vue pour être redirigé vers une salle de chat
+
+def private_chat_redirect(request, user_id):
+    user1 = request.user
+    user2 = get_object_or_404(User, id=user_id)
+    
+    # Ensure the same user cannot start a chat with themselves
+    if user1 == user2:
+        return redirect('some_error_page')  # Redirect to an error page or handle accordingly
+    
+    # Check if a chat already exists between these two users
+    chat = PrivateChat.objects.filter(user1=user1, user2=user2).first() or \
+           PrivateChat.objects.filter(user1=user2, user2=user1).first()
+    
+    if not chat:
+        chat = PrivateChat.objects.create(user1=user1, user2=user2)
+    
+    return redirect('chat_room', chat_id=chat.id)
+
+
+# Vue pour rendre la page de chat
+@login_required
+def chat_room(request, chat_id):
+    # Recherche de la salle de chat en fonction de l'identifiant donné
+    chat = get_object_or_404(PrivateChat, id=chat_id)
+    
+    return render(request, 'chat_room.html', {'chat_id': chat.id})

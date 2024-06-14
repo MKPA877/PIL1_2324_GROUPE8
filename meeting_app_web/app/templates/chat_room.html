@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+</head>
+<body>
+    <div id="chat-messages"></div>
+    <form id="message-form">
+        <input type="text" id="message-input" placeholder="Type your message here">
+        <button type="submit">Send</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var chatSocket = new WebSocket('ws://{{ request.get_host }}/ws/chat/{{ chat_id }}/');
+
+        chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            $('#chat-messages').append('<div>' + data.message + '</div>');
+        };
+
+        $('#message-form').on('submit', function(event) {
+            event.preventDefault();
+            var messageInputDom = $('#message-input');
+            var message = messageInputDom.val();
+            chatSocket.send(JSON.stringify({'message': message, 'type': 'text'}));
+            messageInputDom.val('');
+        });
+    </script>
+</body>
+</html>

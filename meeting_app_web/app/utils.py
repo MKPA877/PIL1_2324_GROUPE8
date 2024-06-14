@@ -1,5 +1,4 @@
 
-# utils.py
 from .models import *
 
 def find_compatible_users(user):
