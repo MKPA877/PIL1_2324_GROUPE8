@@ -19,7 +19,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 return
         except PrivateChat.DoesNotExist:
             await self.close()
-            return
 
         self.room_group_name = f'private_chat_{self.chat_id}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)

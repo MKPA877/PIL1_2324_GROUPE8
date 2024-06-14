@@ -12,20 +12,24 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        var chatSocket = new WebSocket('ws://{{ request.get_host }}/ws/chat/{{ chat_id }}/');
-
-        chatSocket.onmessage = function(e) {
-            var data = JSON.parse(e.data);
-            $('#chat-messages').append('<div>' + data.message + '</div>');
+        const user_username = JSON.parse(document.getElementById('user_username').textContent);
+        document.querySelector('#submit').onclick = function (e) {
+            const messageInputDom = document.querySelector('#input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': user_username,
+            }));
+            messageInputDom.value = '';
         };
 
-        $('#message-form').on('submit', function(event) {
-            event.preventDefault();
-            var messageInputDom = $('#message-input');
-            var message = messageInputDom.val();
-            chatSocket.send(JSON.stringify({'message': message, 'type': 'text'}));
-            messageInputDom.val('');
-        });
+        const boxName = JSON.parse(document.getElementById('box-name').textContent);
+        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + boxName + '/');
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-text').value += (data.message + ' sent by ' + data.username + '\n')
+        }
+
     </script>
 </body>
 </html>

@@ -1,20 +1,43 @@
-<!-- templates/index.html -->
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
-    
-</head>
-<body>
-    <h1>Bienvenue sur notre application</h1>
-    <p>Cette application vous permet de gérer vos préférences et de trouver des profils compatibles.</p>
-    <nav>
-        <ul>
-            <li><a href="{% url 'preferences' %}">Préférences</a></li>
-            
-        </ul>
-    </nav>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+    Page d'accueil
+{% endblock title %}
+
+{% block content %}
+    <style>
+        body {
+            background-image: url("/static/love.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            vertical-align: middle;
+            color: white;
+        }
+
+        .button {
+            background-color: #ff6961;
+            background-image: linear-gradient(to left, #ff3737, #ffa07a);
+            color: rgb(8, 8, 8);
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius: 15px;
+            border-top-right-radius: 15px;
+            position: absolute;
+            bottom: 0;
+            transform: translateX(-50%);
+            border: none;
+        }
+    </style>
+
+    <h1 style="margin-top: 25%;">Hook Up</h1>
+    <a href="{% url 'login' %}" class="button">Continuer</a>
+{% endblock content %}

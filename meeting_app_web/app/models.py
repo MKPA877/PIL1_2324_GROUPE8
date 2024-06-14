@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-
 class User(AbstractUser):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -26,24 +25,24 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+
 class Connection(models.Model):
-	sender = models.ForeignKey(
-		User,
-		related_name='sent_connections',
-		on_delete=models.CASCADE
-	)
-	receiver = models.ForeignKey(
-		User,
-		related_name='received_connections',
-		on_delete=models.CASCADE
-	)
-	accepted = models.BooleanField(default=False)
-	updated = models.DateTimeField(auto_now=True)
-	created = models.DateTimeField(auto_now_add=True)
+    sender = models.ForeignKey(
+        User,
+        related_name='sent_connections',
+        on_delete=models.CASCADE
+    )
+    receiver = models.ForeignKey(
+        User,
+        related_name='received_connections',
+        on_delete=models.CASCADE
+    )
+    accepted = models.BooleanField(default=False)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
-	def __str__(self):
-		return self.sender.username + ' -> ' + self.receiver.username
-
+    def __str__(self):
+        return self.sender.username + ' -> ' + self.receiver.username
 
 
 class Message(models.Model):
@@ -68,7 +67,6 @@ class Message(models.Model):
         return self.user.username + ': ' + (self.text if self.text else 'Media message')
 
 
-
 class CentresDInteret(models.Model):
     user = models.OneToOneField(
         User,
@@ -86,24 +84,18 @@ class CentresDInteret(models.Model):
         return f'Centres d\'intérêt de {self.user.username}'
 
 
-# Modèle gérant les relations d'amitié ainsi que les pourcentage
 class Friendship(models.Model):
-    User1 = models.ForeignKey(User, related_name='friends', on_delete=models.CASCADE)
-    User2 = models.ForeignKey(User, on_delete=models.CASCADE)
+    user1 = models.ForeignKey(User, related_name='friends', on_delete=models.CASCADE)
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE)
     common_percentage = models.FloatField()
 
     def __str__(self):
-        return f"{self.User1, User.username} <-> {self.User2, User.username}"
+        return f"{self.user1.username} <-> {self.user2.username}"
 
-
-
-# Modèle pour les salles de chat
 
 class PrivateChat(models.Model):
-    user1 = models.ForeignKey(User, related_name='user1_chats', on_delete=models.CASCADE)
-    user2 = models.ForeignKey(User, related_name='user2_chats', on_delete=models.CASCADE)
+    connection = models.OneToOneField(Connection, related_name='chat', on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Chat between {self.user1.username} and {self.user2.username}'
-
+        return f'Chat between {self.connection.sender.username} and {self.connection.receiver.username}'

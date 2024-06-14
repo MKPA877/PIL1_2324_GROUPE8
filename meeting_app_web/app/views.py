@@ -9,14 +9,12 @@ from .utils import *
 
 
 
-
 def index_view(request):
+    if request.method == 'POST' and 'Continuer' in request.POST:
+        return redirect('login')  # Redirection vers la page de connexion
     return render(request, 'index.html')
 
 
-
-def index_view(request):
-    return render(request, 'index.html')
 
 def login_view(request):
     if request.method == 'POST':
@@ -42,7 +40,6 @@ def signup_view(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
-            # Authentifier l'utilisateur après inscription
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('accueil')  # Rediriger l'utilisateur vers la page d'accueil après inscription
@@ -90,51 +87,48 @@ def conversations_view(request):
     return render(request, 'conversations.html', {'conversations': context})
 
 
-
-# Vues pour les suggestions d'amis en fonction du sexe opposé
 def suggestions_view(request):
     user_profile = request.user.userprofile
     
-    #récupération de tous les profils d'utilisateurs de sexe opposé
-    opposite_profiles = User.objects.exclude(user=request.user), filter(user__gender='opposé')
-
+    # Récupération de tous les profils d'utilisateurs de sexe opposé
+    opposite_profiles = User.objects.exclude(id=request.user.id).filter(gender='F' if user_profile.gender == 'M' else 'M')
+    
     suggestions = []
 
     for profile in opposite_profiles:
-        common_percentage = calculate_common_percentage(user_profile, profile)
+        common_percentage = calculate_common_percentage(user_profile, profile.userprofile)
         suggestions.append((profile, common_percentage))
 
-    # Triage des suggestions par pourcentage de points communs(ordre décroissant)
+    # Triage des suggestions par pourcentage de points communs (ordre décroissant)
     suggestions = sorted(suggestions, key=lambda x: x[1], reverse=True)
 
     return render(request, 'suggestions.html', {'suggestions': suggestions})
 
 
-
-# Vue pour être redirigé vers une salle de chat
-
+@login_required
 def private_chat_redirect(request, user_id):
     user1 = request.user
     user2 = get_object_or_404(User, id=user_id)
     
-    # Ensure the same user cannot start a chat with themselves
     if user1 == user2:
-        return redirect('some_error_page')  # Redirect to an error page or handle accordingly
+        return redirect('some_error_page')  # Rediriger vers une page d'erreur ou gérer le cas
     
-    # Check if a chat already exists between these two users
-    chat = PrivateChat.objects.filter(user1=user1, user2=user2).first() or \
-           PrivateChat.objects.filter(user1=user2, user2=user1).first()
+    # Vérifiez si une connexion existe déjà entre ces utilisateurs
+    connection = Connection.objects.filter(
+        (Q(sender=user1) & Q(receiver=user2)) | (Q(sender=user2) & Q(receiver=user1))
+    ).first()
     
+    if not connection:
+        connection = Connection.objects.create(sender=user1, receiver=user2, accepted=True)
+    
+    chat = PrivateChat.objects.filter(connection=connection).first()
     if not chat:
-        chat = PrivateChat.objects.create(user1=user1, user2=user2)
+        chat = PrivateChat.objects.create(connection=connection)
     
     return redirect('chat_room', chat_id=chat.id)
 
 
-# Vue pour rendre la page de chat
 @login_required
 def chat_room(request, chat_id):
-    # Recherche de la salle de chat en fonction de l'identifiant donné
     chat = get_object_or_404(PrivateChat, id=chat_id)
-    
     return render(request, 'chat_room.html', {'chat_id': chat.id})
