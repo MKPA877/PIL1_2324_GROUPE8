@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import *
+from .models import CustomUser
 
 class SignUpForm(UserCreationForm):
     nom = forms.CharField(max_length=30, required=True)
@@ -32,3 +33,24 @@ class PreferenceForm(forms.ModelForm):
     class Meta:
         model = CentresDInteret
         fields = ['sport', 'musique', 'voyage', 'technologie', 'lecture', 'cinema']
+
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields =['profile_picture']
+
+class UsernameChangeForm(forms.ModelForm):
+    class Meta: 
+        model = User
+        fields = ['username']
+        widgets = {
+            'username': form.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class BioChangeForm(form.ModelForm):
+    class Meta: 
+        model = CustomUser
+        fields =['bio']
+        widgets ={
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

@@ -6,6 +6,7 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 from .utils import *
+from .forms import ProfilePictureForm
 
 
 
@@ -83,3 +84,44 @@ def conversations_view(request):
         })
 
     return render(request, 'conversations.html', {'conversations': context})
+
+
+@login_required 
+def upload_profile_picture(request):
+    if request.methode == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form= ProfilePictureForm(instance=request.user)
+    return render(request, 'upload_profile_picture.html', {'form': form})
+
+@login_required 
+def change_username(request):
+    if request.methode == 'POST':
+        form = UsernameChangeForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.sucess(request, 'Your username has been updated successfully!')
+            return redirect('profile')
+        else:
+            form = UsernameChangeForm(instance=request.user)
+        return render(request, 'change_username.html', {'form': form}) 
+
+@login_required 
+def change_username(request):
+    if request.methode == 'POST':
+        form = BioChangeForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.sucess(request, 'Your bio has been updated successfully!')
+            return redirect('profile')
+        else:
+            form = BioChangeForm(instance=request.user)
+        return render(request, 'change_bio.html', {'form': form}) 
+
+
+@login_required 
+def messaging(request):
+    return render(request, 'messagin.html')
