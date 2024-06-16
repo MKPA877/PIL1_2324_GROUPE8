@@ -11,10 +11,10 @@ class User(AbstractUser):
         ('F', 'Female'),
     ]
     gender = models.CharField(max_length=1, choices=gender_choices)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(null=True)
     place_of_birth = models.CharField(max_length=100)
     bio = models.TextField(blank=True, null=True)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=False)
     password = models.CharField(max_length=128)
     profile_picture = models.ImageField(
         upload_to="images/profile_pictures/",

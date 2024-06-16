@@ -25,12 +25,20 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('accueil')  # Redirection après connexion
+                try:
+                    user_preferences = CentresDInteret.objects.get(user=user)
+                    return redirect('compatible_profils') 
+                except CentresDInteret.DoesNotExist:
+                    return redirect('preferences')
             else:
-                messages.error(request, "Nom d'utilisateur ou mot de passe incorrect. Peut être que vous n'avez pas de compte")
+                messages.error(request, "Nom d'utilisateur ou mot de passe incorrect. Peut-être que vous n'avez pas de compte.")
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
+
+
+
+
 
 
 def signup_view(request):
@@ -41,23 +49,42 @@ def signup_view(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('accueil')  # Rediriger l'utilisateur vers la page d'accueil après inscription
+            if user is not None:
+                login(request, user)
+                return redirect('login')  # Rediriger l'utilisateur vers la page d'accueil après inscription
+            else:
+                messages.error(request, "Authentication failed. Please try again.")
+        else:
+            # Collect form errors to display them
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
     else:
         form = SignUpForm()
+    
     return render(request, 'inscription.html', {'form': form})
+
 
 
 @login_required
 def preference_view(request):
-    if request.method == 'POST':
-        form = PreferenceForm(request.POST, instance=request.user.preference)
+    # Attempt to get the user's CentresDInteret instance, or create one if it doesn't exist
+    try:
+        centres_d_interet = request.user.centres_d_interet
+    except CentresDInteret.DoesNotExist:
+        centres_d_interet = CentresDInteret(user=request.user)
+        centres_d_interet.save()
+
+    # Initialize the form with the instance
+    form = PreferenceForm(instance=centres_d_interet)
+
+    # Handle POST request
+    if request.method == "POST":
+        form = PreferenceForm(request.POST, instance=centres_d_interet)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Vos préférances ont été enregistrées avec succès!')
-            return redirect('preferences')
-    else:
-        form = PreferenceForm(instance=request.user.preference)
+            return redirect('compatible_profils')  # Replace with the actual success URL
+
     return render(request, 'preferences.html', {'form': form})
 
 
@@ -66,7 +93,6 @@ def compatible_profiles(request):
     user = request.user
     compatible_users = find_compatible_users(user)
     return render(request, 'compatible_profils.html', {'compatible_users': compatible_users})
-
 
 @login_required
 def conversations_view(request):

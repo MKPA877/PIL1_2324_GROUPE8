@@ -1,13 +1,85 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #ffe6e6;
+        margin: 0;
+        background-image: url("/static/love.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    
+    .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 300px;
+        width: 100%;
+    }
+    
+    .container h2 {
+        margin-bottom: 20px;
+        font-size: 1.5em;
+    }
+    
+    .container img {
+        width: 150px;
+        margin-bottom: 20px;
+    }
+    
+    .container input[type="text"],
+    .container input[type="password"] {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    .container a {
+        text-decoration: none;
+        color: #0695f5;
+        font-size: 0.9em;
+    }
+    
+    .container .btn {
+        background-color: #0695f5;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .container .btn:hover {
+        background-color: #0695f5;
+    }
+</style>
+
 <div class="container">
     <h2>Connexion</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Se connecter</button>
+        <div class="form-group">
+            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Entrez votre mot de passe" required>
+        </div>
+        <button type="submit" class="btn">Se connecter</button>
     </form>
+    <p><a href="#">Mot de passe oublié ?</a></p>
+    <p>Si vous n'avez pas de compte, vous pouvez en créer un <a href="{% url 'inscription' %}">ici</a>.</p>
     {% if messages %}
         {% for message in messages %}
             <div>{{ message }}</div>
@@ -15,3 +87,4 @@
     {% endif %}
 </div>
 {% endblock %}
+

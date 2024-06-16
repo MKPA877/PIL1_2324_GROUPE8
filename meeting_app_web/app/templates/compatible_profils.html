@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header><h1>Personnes qui pourraient vous plaire</h1></header>
+    <main>
+        {% for user in compatible_users %}
+        <div class="div1">
+            <div class="div11">
+                <button class="button" style="background-image: url('{{ user.profile_picture.url }}');">
+                    <img src="v" alt="">
+                </button>
+            </div>
+            <div class="div12">
+                <div class="bu"><button class="but">{{ user.bio }}</button></div>
+                <div class="bu"><button class="but">{{ user.common_percentage }}% de correspondance</button></div>
+                <div class="bu"><button class="but">Ses préférences</button></div>
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+{% endblock %}

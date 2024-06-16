@@ -89,19 +89,19 @@ WSGI_APPLICATION = "meeting_app_web.wsgi.application"
 
 
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'project',
-        'USER': 'user',
+        'USER': 'myuser',
         'PASSWORD': 'user229@',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
 
-
-# Password validation
+# Password validation 
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [

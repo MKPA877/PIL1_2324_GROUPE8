@@ -1,24 +1,20 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Titre par défaut{% endblock title %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Mon site</title>
 </head>
 <body>
     <header>
-        <!-- Mettre ici le contenu commun de l'en-tête si nécessaire -->
+        <!-- Votre en-tête ici -->
     </header>
-    
     <main>
-        {% block content %}
-        <!-- Le contenu spécifique du template enfant sera inséré ici -->
-        {% endblock content %}
+        {% block content %}{% endblock %}
     </main>
-    
     <footer>
-        <!-- Mettre ici le contenu commun du pied de page si nécessaire -->
+        <!-- Votre pied de page ici -->
     </footer>
 </body>
 </html>
+
