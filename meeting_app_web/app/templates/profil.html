@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinder Interface</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        
+        .card {
+            width: 300px;
+            height: 450px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .logo {
+            height: 30px;
+        }
+        
+        .chat-icon {
+            font-size: 24px;
+            color: #ff5864;
+            cursor: pointer;
+        }
+        
+        .profile-picture {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e6e6e6;
+            position: relative;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .profile-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: none;
+        }
+        
+        .picture-placeholder {
+            font-size: 16px;
+            color: #a0a0a0;
+            position: absolute;
+        }
+        
+        .actions {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .dislike {
+            color: #ff5864;
+        }
+        
+        .info {
+            color: #4a90e2;
+        }
+        
+        .like {
+            color: #4caf50;
+        }
+        
+        .next {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        
+        .next-button {
+            background-color: #ff5864;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .next-button:hover {
+            background-color: #e04850;
+        }
+
+        .upload-button {
+            background-color: #ff5864;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: center;
+            display: block;
+        }
+
+        .upload-button:hover {
+            background-color: #e04850;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="" alt=" logo" class="logo">
+            <div class="chat-icon" onclick="startChat()">&#x1F4AC;</div>
+        </div>
+        <div class="profile-picture" id="profile-picture">
+            <img src="" alt="Profile Picture" class="profile-image">
+            <div class="picture-placeholder">UNFILTERED SINGLE</div>
+        </div>
+        <div class="actions">
+            <button class="dislike" onclick="dislike()">&#10060;</button>
+            <button class="info" onclick="showInfo()">&#8505;</button>
+            <button class="like" onclick="like()">&#10084;</button>
+        </div>
+        <div class="next">
+            <button class="next-button" onclick="nextProfile()">Suivant</button>
+        </div>
+    </div>
+
+    <script scoop>
+       // Sample profiles array
+const profiles = [
+{
+    image: 'profile1.jpg',
+    info: 'Profile 1: Loves hiking and outdoor adventures.',
+},
+{
+    image: 'profile2.jpg',
+    info: 'Profile 2: Avid reader and coffee enthusiast.',
+},
+// Add more profiles as needed
+];
+
+let currentProfileIndex = 0;
+
+function loadProfile(index) {
+const profile = profiles[index];
+const profilePicture = document.getElementById('profile-picture');
+const profileImage = profilePicture.querySelector('.profile-image');
+const picturePlaceholder = profilePicture.querySelector('.picture-placeholder');
+
+if (profile) {
+    profileImage.src = profile.image;
+    profileImage.style.display = 'block';
+    picturePlaceholder.style.display = 'none';
+}
+}
+
+function like() {
+alert('You liked this profile!');
+}
+
+function dislike() {
+alert('You disliked this profile.');
+}
+
+function showInfo() {
+const profile = profiles[currentProfileIndex];
+alert(profile.info);
+}
+
+function startChat() {
+alert('Starting chat...');
+}
+
+function nextProfile() {
+currentProfileIndex = (currentProfileIndex + 1) % profiles.length;
+loadProfile(currentProfileIndex);
+}
+
+// Load the first profile on page load
+window.onload = function() {
+loadProfile(currentProfileIndex);
+};
+function uploadImage() {
+    const fileInput = document.getElementById('upload');
+    const profileImage = document.querySelector('.profile-image');
+    const picturePlaceholder = document.querySelector('.picture-placeholder');
+
+    const file = fileInput.files[0]; 
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profileImage.src = e.target.result;
+
+            profileImage.style.display = 'block';
+
+            picturePlaceholder.style.display = 'none';
+        
+        };
+        reader.readAsDataURL(file);
+    }
+
+}
+ // Load the first profile on page load
+ window.onload = function() {
+    loadProfile(currentProfileIndex);
+ };
+    </script>
+</body>
+</html>

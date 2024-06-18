@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Demandes d'invitations reçues</h2>
+<ul>
+  {% for invitation in received_invitations %}
+    <li>{{ invitation.sender.username }} <a href="{% url 'accept_invitation' invitation.id %}">Accepter</a></li>
+  {% empty %}
+    <li>Aucune invitation reçue</li>
+  {% endfor %}
+</ul>
+
+<h2>Demandes d'invitations envoyées</h2>
+<ul>
+  {% for invitation in sent_invitations %}
+    <li>{{ invitation.receiver.username }} (En attente)</li>
+  {% empty %}
+    <li>Aucune invitation envoyée</li>
+  {% endfor %}
+</ul>
+
+{% endblock  %}

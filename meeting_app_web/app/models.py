@@ -7,8 +7,8 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=30)
     #username = models.CharField(max_length=30)
     gender_choices = [
-        ('M', 'Male'),
-        ('F', 'Female'),
+        ('M', 'Masculin'),
+        ('F', 'Feminin'),
     ]
     gender = models.CharField(max_length=1, choices=gender_choices)
     date_of_birth = models.DateField(null=True)
@@ -99,3 +99,12 @@ class PrivateChat(models.Model):
 
     def __str__(self):
         return f'Chat between {self.connection.sender.username} and {self.connection.receiver.username}'
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message

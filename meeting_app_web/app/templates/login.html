@@ -62,7 +62,7 @@
     }
     
     .container .btn:hover {
-        background-color: #0695f5;
+        background-color: #057dc5;
     }
 </style>
 
@@ -70,21 +70,17 @@
     <h2>Connexion</h2>
     <form method="post">
         {% csrf_token %}
-        <div class="form-group">
-            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-        </div>
-        <div class="form-group">
-            <input type="password" name="password" placeholder="Entrez votre mot de passe" required>
-        </div>
+        {{ form.as_p }}
         <button type="submit" class="btn">Se connecter</button>
     </form>
     <p><a href="#">Mot de passe oublié ?</a></p>
     <p>Si vous n'avez pas de compte, vous pouvez en créer un <a href="{% url 'inscription' %}">ici</a>.</p>
     {% if messages %}
         {% for message in messages %}
-            <div>{{ message }}</div>
+            <div class="alert {{ message.tags }}">{{ message }}</div>
         {% endfor %}
     {% endif %}
 </div>
 {% endblock %}
+
 

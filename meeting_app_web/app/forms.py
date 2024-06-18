@@ -40,3 +40,26 @@ class PreferenceForm(forms.ModelForm):
     class Meta:
         model = CentresDInteret
         fields = ['sport', 'musique', 'voyage', 'technologie', 'lecture', 'cinema']
+
+
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['profile_picture']
+
+class UsernameChangeform(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class BioChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['bio']
+        widgets = {
+            'bio': forms.Textarea(attrs={'class':'form-control', 'row':3}),
+        }

@@ -1,21 +1,297 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <header><h1>Personnes qui pourraient vous plaire</h1></header>
-    <main>
-        {% for user in compatible_users %}
-        <div class="div1">
-            <div class="div11">
-                <button class="button" style="background-image: url('{{ user.profile_picture.url }}');">
-                    <img src="v" alt="">
-                </button>
-            </div>
-            <div class="div12">
-                <div class="bu"><button class="but">{{ user.bio }}</button></div>
-                <div class="bu"><button class="but">{{ user.common_percentage }}% de correspondance</button></div>
-                <div class="bu"><button class="but">Ses préférences</button></div>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url("/static/femme-cerf-volant-air-chaud-dans-nuit.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+        
+        .card {
+            width: 400px; /* Augmenter la largeur de la carte */
+            height: 600px; /* Augmenter la hauteur de la carte */
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 200px; /* Ajuster la marge droite pour faire de la place à la barre latérale */
+        }
+        
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        
+        .connection-request-icon {
+            font-size: 24px; /* Taille de l'icône */
+            color: #ff5864; /* Couleur de l'icône */
+            cursor: pointer;
+        }
+        
+        
+        
+        .profile-picture {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e6e6e6;
+            position: relative;
+            height: 70%; /* Ajuster la hauteur pour mieux utiliser l'espace */
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .profile-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .picture-placeholder {
+            font-size: 16px;
+            color: #a0a0a0;
+            position: absolute;
+        }
+
+        .username {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .actions {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .dislike {
+            color: #ff5864;
+        }
+        
+        .info {
+            color: #4a90e2;
+        }
+        
+        .like {
+            color: #4caf50;
+        }
+        
+        .next {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        
+        .next-button {
+            background-color: #ff5864;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .next-button:hover {
+            background-color: #e04850;
+        }
+
+        .sidebar {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 70px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 20px; /* Ajustez la taille de l'icône */
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #ff5864;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex; /* Utiliser flex pour centrer l'icône verticalement */
+            justify-content: center; /* Centrer l'icône horizontalement */
+            align-items: center; /* Centrer l'icône verticalement */
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* Redimensionner les icônes pour les rendre plus grandes */
+        .sidebar a i {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Ajoutez de l'espace entre les icônes */
+        .sidebar a + a {
+            margin-top: 10px;
+        }
+        
+
+        .sidebar a:hover {
+            background-color: #e04850;
+        }
+
+        .friend-request {
+            color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="" alt="logo" class="logo">
+            <div class="connection-request-icon" onclick="startChat()"><i class="fas fa-user-plus"></i></div>
         </div>
-        {% endfor %}
-    </main>
+        <div class="profile-picture" id="profile-picture">
+            <img src="" alt="Profile Picture" class="profile-image">
+            <div class="picture-placeholder">UNFILTERED SINGLE</div>
+        </div>
+        <div class="username" id="username">Nom d'utilisateur</div>
+        <div class="actions">
+            <button class="friend-request" onclick="sendFriendRequest(profiles[currentProfileIndex].username)">&#128101;</button>
+            <button class="dislike" onclick="dislike()">&#10060;</button>
+            <button class="info" onclick="showInfo()">&#8505;</button>
+            <button class="like" onclick="like()">&#10084;</button>
+        </div>
+        <div class="next">
+            <button class="next-button" onclick="nextProfile()">Suivant</button>
+        </div>
+    </div>
+    
+    <div class="sidebar">
+        <a href="{% url 'conversations_view' %}"><i class="fas fa-user-edit"></i>&#128172;</a>
+        <a href="{% url 'gest_profil' %}"><i class="fas fa-comments"></i>&#9998;</a>
+        <a href="{% url 'notification_list' %}"><i class="fas fa-bell"></i></a>
+    </div>
+
+    <script>
+        const profiles = [
+            {% for user in compatible_users %}
+            {
+                image: '{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}/static/images/default-profile.png{% endif %}',
+                username: '{{ user.username }}',
+                info: '{{ user.common_percentage }}% de correspondance'
+            },
+            {% endfor %}
+        ];
+
+        let currentProfileIndex = 0;
+
+        function loadProfile(index) {
+            const profile = profiles[index];
+            const profilePicture = document.getElementById('profile-picture');
+            const profileImage = profilePicture.querySelector('.profile-image');
+            const picturePlaceholder = profilePicture.querySelector('.picture-placeholder');
+            const usernameElement = document.getElementById('username');
+
+            if (profile) {
+                profileImage.src = profile.image;
+                profileImage.style.display = 'block';
+                picturePlaceholder.style.display = 'none';
+                usernameElement.textContent = profile.username;
+            }
+        }
+
+        function getCsrfToken() {
+            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        }
+
+        function sendFriendRequest(toUsername) {
+            fetch(`/send_invitation/${toUsername}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCsrfToken(),  // Ajoutez ceci pour la protection CSRF
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Invitation envoyée avec succès.');
+                } else {
+                    alert('Une erreur s\'est produite lors de l\'envoi de l\'invitation.');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi de la requête:', error);
+                alert('Une erreur s\'est produite lors de l\'envoi de l\'invitation.');
+            });
+        }
+
+        function like() {
+            alert('Vous avez aimé ce profil!');
+        }
+
+        function dislike() {
+            alert('Vous n\'avez pas aimé ce profil.');
+        }
+
+        function showInfo() {
+            const profile = profiles[currentProfileIndex];
+            alert(profile.info);
+        }
+
+        function startChat() {
+            alert('Démarrer la conversation...');
+        }
+
+        function nextProfile() {
+            currentProfileIndex = (currentProfileIndex + 1) % profiles.length;
+            loadProfile(currentProfileIndex);
+        }
+
+        window.onload = function() {
+            loadProfile(currentProfileIndex);
+        };
+    </script>
+</body>
+</html>
 {% endblock %}

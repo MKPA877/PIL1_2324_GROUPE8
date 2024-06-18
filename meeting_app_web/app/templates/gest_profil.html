@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <form method="post" enctype="multipart/form-data" action="{% url 'upload_profile_picture' %}">
+    {% csrf_token %}
+    <h2>Gestion du Profil</h2>
+    <div class="input-container">
+      <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
+      <label for="profile_picture">Photo de Profil</label>
+    </div>
+    <button type="submit">Changer la photo de profil</button>
+  </form>
+
+  <form method="post" action="{% url 'change_username' %}">
+    {% csrf_token %}
+    <div class="input-container">
+      <input type="text" id="username" name="username" value="{{ request.user.username }}" required>
+      <label for="username">Nom d'utilisateur</label>
+    </div>
+    <button type="submit">Changer le nom d'utilisateur</button>
+  </form>
+
+  <form method="post" action="{% url 'change_bio' %}">
+    {% csrf_token %}
+    <div class="input-container">
+      <textarea id="bio" name="bio" required>{{ request.user.bio }}</textarea>
+      <label for="bio">Biographie</label>
+    </div>
+    <button type="submit">Modifier la biographie</button>
+  </form>
+</div>
+{% endblock %}

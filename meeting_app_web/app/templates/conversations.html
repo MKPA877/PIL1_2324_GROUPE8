@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .conversations-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    .conversation-item {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .participant-info {
+        display: flex;
+        align-items: center;
+    }
+    
+    .profile-picture {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    
+    .last-message {
+        flex-grow: 1;
+        padding-left: 20px;
+    }
+    
+    .actions {
+        margin-left: 20px;
+    }
+    
+    .actions .btn {
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        color: #007bff;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .actions .btn:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+</style>
+<div class="container">
+    <h1>Conversations</h1>
+    <div class="conversations-list">
+        {% for conversation in conversations %}
+        <div class="conversation-item">
+            <div class="participant-info">
+                {% if conversation.other_participant.profile_picture %}
+                    <img src="{{ conversation.other_participant.profile_picture.url }}" alt="{{ conversation.other_participant.username }}" class="profile-picture">
+                {% else %}
+                    <img src="/static/images/default-profile.png" alt="Default Image" class="profile-picture">
+                {% endif %}
+                <h2>{{ conversation.other_participant.username }}</h2>
+            </div>
+            <div class="last-message">
+                {% if conversation.last_message %}
+                <p><strong>{{ conversation.last_message.sender.username }}:</strong> {{ conversation.last_message.content }}</p>
+                <small>Envoyé le {{ conversation.last_message.date_envoi }}</small>
+                {% else %}
+                <p>Aucun message</p>
+                {% endif %}
+            </div>
+            <div class="actions">
+                <a href="{% url 'private_chat_redirect' conversation.other_participant.username %}" class="btn btn-primary">Voir la conversation</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

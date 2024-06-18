@@ -113,7 +113,7 @@ def conversations_view(request):
     return render(request, 'conversations.html', {'conversations': context})
 
 
-def suggestions_view(request):
+"""def suggestions_view(request):
     user_profile = request.user.userprofile
     
     # Récupération de tous les profils d'utilisateurs de sexe opposé
@@ -128,13 +128,13 @@ def suggestions_view(request):
     # Triage des suggestions par pourcentage de points communs (ordre décroissant)
     suggestions = sorted(suggestions, key=lambda x: x[1], reverse=True)
 
-    return render(request, 'suggestions.html', {'suggestions': suggestions})
+    return render(request, 'suggestions.html', {'suggestions': suggestions})"""
 
 
 @login_required
-def private_chat_redirect(request, user_id):
+def private_chat_redirect(request, username):
     user1 = request.user
-    user2 = get_object_or_404(User, id=user_id)
+    user2 = get_object_or_404(User, username=username)
     
     if user1 == user2:
         return redirect('some_error_page')  # Rediriger vers une page d'erreur ou gérer le cas
@@ -158,3 +158,96 @@ def private_chat_redirect(request, user_id):
 def chat_room(request, chat_id):
     chat = get_object_or_404(PrivateChat, id=chat_id)
     return render(request, 'chat_room.html', {'chat_id': chat.id})
+
+
+
+@login_required 
+def upload_profile_picture(request):
+    if request.methode == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form= ProfilePictureForm(instance=request.user)
+    return render(request, 'gest_profil.html', {'form': form})
+
+@login_required 
+def change_username(request):
+    if request.methode == 'POST':
+        form = UsernameChangeform(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.sucess(request, 'Your username has been updated successfully!')
+            return redirect('profile')
+        else:
+            form = UsernameChangeform(instance=request.user)
+        return render(request, 'gest_profil.html', {'form': form}) 
+
+@login_required 
+def change_bio(request):
+    if request.methode == 'POST':
+        form = BioChangeForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.sucess(request, 'Your bio has been updated successfully!')
+            return redirect('profile')
+        else:
+            form = BioChangeForm(instance=request.user)
+        return render(request, 'gest_profil.html', {'form': form}) 
+
+
+@login_required
+def send_invitation(request, to_username):
+    if request.method == 'POST':
+        from_user = request.user
+        to_user = get_object_or_404(User, username=to_username)
+        
+        # Vérifier si une connexion existe déjà dans les deux sens
+        connection_exists = Connection.objects.filter(
+            Q(sender=from_user, receiver=to_user) | Q(sender=to_user, receiver=from_user)
+        ).exists()
+        
+        if not connection_exists:
+            # Créer une invitation
+            Connection.objects.create(sender=from_user, receiver=to_user, accepted=False)
+            messages.success(request, "Invitation envoyée avec succès.")
+            return redirect('notification_list')  # Rediriger vers la nouvelle page de notifications
+        else:
+            messages.error(request, "Une connexion existe déjà.")
+    return render(request, 'compatible_profils.html')
+
+@login_required
+def accept_invitation(request, connection_id):
+    connection = get_object_or_404(Connection, id=connection_id)
+    if connection.receiver == request.user:
+        connection.accepted = True
+        connection.save()
+        return redirect('notification_list')  # Rediriger vers la nouvelle page de notifications
+    else:
+        return redirect('notification_list')
+    
+
+@login_required
+def notification_list(request):
+    received_invitations = Connection.objects.filter(receiver=request.user, accepted=False)
+    sent_invitations = Connection.objects.filter(sender=request.user, accepted=False)
+    context = {
+        'received_invitations': received_invitations,
+        'sent_invitations': sent_invitations,
+    }
+    return render(request, 'notification_list.html', context)
+
+
+
+
+@login_required
+def go_to_gest_profil(request):
+    return render(request, 'gest_profil.html')
+
+
+
+
+@login_required
+def go_to_conversationList(request):
+    return render(request, 'conversations.html')
