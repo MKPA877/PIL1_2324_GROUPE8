@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hook up</title>
+    <link rel="stylesheet" href="assert/css/style.css">
+</head>
+<body>
+
+    <h1>Mettre à jour vos préférences</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enregistrer</button>
+    </form>
+
+    <div class="footer">
+        <button>Continuer</button>
+    </div>
+
+    
+
+    
+</body>
+</html>

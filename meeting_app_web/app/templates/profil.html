@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Utilisateur</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    /* Custom CSS */
+    body {
+        background: linear-gradient(to right, #ff512f, #ff9966);
+    }
+
+    .profile-circle {
+        width: 150px;
+        height:150px;
+        border-radius: 50%;
+        background: relative;
+        margin: 0 auto
+    }
+     
+    .profile-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Informations Profil</h1>
+    <div class="profile-circle">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Facebook_Messenger_logo.svg/240px-Facebook_Messenger_logo.svg.png" alt="Profil Picture">
+    </div>
+    <h3 class="text-center mb-3">Nom d'utilisateur</h3>
+    <div class="biography mt-4">
+      <label for="userName"> <h4>Biographie</h4> </label>
+      <input type="text" class="form-control" id="Bio" placeholder="Ajoutez votre biographie ici">
+    </div>
+    <div class="text-center mb-4">
+      <h4>Informartions</h4>
+    </div>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Modifier Profil</h5>
+            <form>
+              <div class="form-group">
+                <label for="profilePicture">Photo de Profil</label>
+                <input type="file" class="form-control-file" id="profilePicture">
+              </div>
+              <div class="form-group">
+                <label for="userName">Nom d'Utilisateur</label>
+                <input type="text" class="form-control" id="userName" placeholder="Nom d'utilisateur">
+              </div>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -91,11 +91,4 @@ class CentresDInteret(models.Model):
 
     def __str__(self):
         return f'Centres d\'intérêt de {self.user.username}'
-
-class CustomUser(AbstractUser):
-    profile.picture = models.ImageField(upload_to='profile_pictures\', blank=True, null=True)
-
-class CustomUser(AbstractUser):
-    profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=True)
-    bio = models.TextField(max_lenght=500, blank=True)
     
