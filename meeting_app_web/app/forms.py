@@ -6,12 +6,7 @@ from .models import *
 class SignUpForm(UserCreationForm):
     nom = forms.CharField(max_length=30, required=True)
     prenom = forms.CharField(max_length=30, required=True)
-    username = forms.CharField(max_length=30, required=True)
-    SEXE_CHOICES = (
-        ('M', 'Masculin'),
-        ('F', 'Féminin'),
-    )
-    sexe = forms.ChoiceField(choices=SEXE_CHOICES, required=True)
+    sexe = forms.ChoiceField(choices=User.gender_choices, required=True)
     date_naissance = forms.DateField(required=True, help_text='Format: AAAA-MM-JJ')
     lieu_naissance = forms.CharField(max_length=100, required=True)
     bio = forms.CharField(widget=forms.Textarea, required=False)
@@ -20,6 +15,19 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'nom', 'prenom', 'sexe', 'date_naissance', 'lieu_naissance', 'bio', 'email', 'password1', 'password2')
+
+    def save(self, commit=True):
+        user = super(SignUpForm, self).save(commit=False)
+        user.first_name = self.cleaned_data['nom']
+        user.last_name = self.cleaned_data['prenom']
+        user.gender = self.cleaned_data['sexe']
+        user.date_of_birth = self.cleaned_data['date_naissance']
+        user.place_of_birth = self.cleaned_data['lieu_naissance']
+        user.bio = self.cleaned_data['bio']
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
 
 
 class LoginForm(forms.Form):

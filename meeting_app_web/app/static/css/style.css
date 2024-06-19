@@ -1,0 +1,95 @@
+.VO1{
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 45px;
+    color:rgb(252, 250, 251);
+    letter-spacing: normal;
+    
+
+
+
+}
+
+body{
+    background-color:rgba(255, 0, 43, 0.712)
+}
+
+    
+
+
+
+.contaner{
+     
+    justify-content: space-between;
+    width: 80%;
+    text-align: center;
+}
+
+.list{
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+    width: 200px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    color: white;
+}
+
+.list.right{
+    margin-left: 1000px;
+    gap: 70px;
+    margin-top: -400px;
+
+}
+
+
+.list.left{
+    margin-left: 150px;
+    gap: 70px;
+    margin-top: 100px;
+}
+
+.list li{
+    padding: 26px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+    margin: 1px;
+}
+
+input[type="checkbox"] {
+    margin-left: 10px;
+}
+
+.footer{
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    align-items: center;
+}
+
+.footer button{
+    background-color: rgb(199, 48, 48);
+    color: white;
+    border: 1px solid rgb(199, 48, 48);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.footer button:hover{
+    background-color: darkred;
+}
+    
+    
+
+    
+
+
