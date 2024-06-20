@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="padding: 15%;">
+    <header>
+        <h1><strong>GROUPE 8</strong></h1>
+    </header>
+    <main>
+        <h2>I.<u>Membres du groupe:</u></h2>
+        <ul>
+            <li>ADANLIENCLOUNO Précieux</li>
+            <li>ADONON Jiovany</li>
+            <li>AKAKPO Godwin</li>
+            <li>AKOTO Yves</li>
+            <li>AMOUO Othiniel</li>
+            <li>GLELE Freddy</li>
+            <li>GUEZODJE Ferréol</li>
+            <li>HOUSSOU Prodige</li>
+            <li>MONGADJI Jihad</li>
+            <li>KOUMAGNON Carmel</li>
+        </ul>
+        <p>
+           <h2><strong>II.<u>Structuration du groupe:</u></strong></h2> 
+           <ul>
+            <li>1-Front-End(Jiovany,Othiniel,Ferréol) </li>
+            <li>2-Back-End (Précieux,Freddy,Godwin,Prodige)</li>
+            <li>3-Suggestion d'amis(Yves,Carmel)</li>
+            <li>4-Rapport & gestion du déploiement du projet(Jihad)</li>
+           </ul>
+        </p>
+        <p>
+            <style>
+                .start{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: start;
+                    margin-bottom: 5px;
+                }
+                .code{
+                    padding: 20px;
+                    margin: 4px;
+                    background-color: wheat;
+                    width: 100%;
+                    border-radius: 8px;
+                }
+             </style>
+             <h2><strong>III.<u>Structuration du projet:</u></strong></h2>
+            <p>Nous vous présenterons à travers le diagramme de cas d'utilisation le fonctionnement du projet :</p>
+            <div>
+                <p><span>&#9733;</span><u>Diagramme de cas d'utilisation:</u></p>
+                <img src="use_case.jpg" width="400px" height="400px alt=">
+                <p><span>&#9733;</span><u>Modèle conceptuel de donnée:</u> </p>
+                <img src="diagramme_class.jpg" width="400px" height="400px">
+            </div>
+            <!-- Instructions pour le déploiement -->
+             <h2><strong>IV.<u>Déploiement de l'application</u></strong></h2>
+             <p>Veuillez suivre les instructions suivant pour un déploiement de l'application</p>
+             <p><strong>-Installation de Django</strong>: <br> </p>
+             
+             <pre class="start">
+                <code class="code">pip install Django</code>
+             </pre>
+             <p><strong>-Installation de Channels et daphne</strong>: <br> </p>
+             
+             <pre class="start">
+                <code class="code">python -m pip install -U channels["daphne"]</code>
+             </pre>
+
+             <p><strong>-Création d'un environnement virtuel dans le répertoire du projet</strong>: <br> </p>
+             <pre class="start">
+                <code class="code">python -m venv .venv</code>
+             </pre>
+
+             <p><strong>-Installation des outils pour une connection avec postgre Sql</strong>: <br> </p>
+             <pre class="start">
+                <code class="code">pip install psycopg2-binary </code>
+             </pre>
+             
+             <p><strong>-Installation de postgre Sql et configuration des paramètres de connection</strong>: <br> </p>
+             <p>Créer une BD avec nom : "project"</p>
+             <p>Configurer le port avec le port de votre Postgre Sql : "PORT":"default"</p>
+             <p>Mettre à jour vos paramètre de connection à la base de donnée defini par defaut sur USER et PASSWORD</p>
+             <pre class="start">
+                <code class="code">
+                    DATABASES = {
+                        'default': {
+                            'ENGINE': 'django.db.backends.postgresql',
+                            'NAME': 'project',
+                            'USER': 'user',
+                            'PASSWORD': 'password',
+                            'HOST': 'localhost',
+                            'PORT': '5432',
+                        }
+                    }
+                </code>
+               
+             </pre>
+             <p><strong>A defaut on peut installer les dépendances python requises pour le projet avec la commande:</strong>
+             </p>
+             <pre class="start">
+                <code class="code">pip install -r requirements.txt</code>
+             </pre>
+             <p>Cette commande permet d'installer tous les modules pythons dont un projet a besoin en une seule fois</p>
+             <p><strong>-Executer les migrations </strong>: <br> </p>
+             <pre class="start">
+                <code class="code"> python manage.py migrate </code>
+             </pre>
+             <p><strong>-Lancer le server de developpement</strong></p>
+             <pre class="start">
+                <code class="code">python manage.py runserver</code>
+             </pre>
+             <p><strong>-Accédez a l'application dans votre navigateur en utilisant l'URL:</strong></p>
+             <pre class="start">
+                <code class="code">http://127.0.0.1:8000/.</code>
+             </pre>
+             <p><strong>-Créer un superutilisateur</strong></p>
+             <pre class="start">
+                <code class="code">python manage.py createsuperuser</code> 
+             </pre>
+             <p><strong>-Se connecter a l'interface d'administration django par l'URL:</strong></p>
+             <pre class="start">
+                <code class="code">http://127.0.0.1:8000/admin/.</code>
+             </pre>
+             <p>Ainsi l'application sera deployée. Merci pour votre attention.</p>
+
+
+
+            <!-- Pour la partie front-End -->
+            <!-- <p>
+                <div><span>&#9733;</span><u>Partie Front-End:</u></div>
+                <div style="padding: 5%;">
+                    -Page de Login  
+                    <div style="align-items: center; margin-bottom: 5%;">
+                        <span>&#10004;</span>Code source: 
+                        <div><embed src="login_page.txt" width="400px" height="400px" type=""></div>
+                    </div>
+    
+    
+                    -Page de préférence
+                    <div style="align-items: center; margin-bottom: 5%;">
+                        <span>&#10004;</span>Code source: 
+                        <div><embed src="page_pref.txt" width="400px" height="400px" type=""></div>
+                    </div>
+    
+                    
+                    -Page d'inscription  
+                    <div style="align-items: center; margin-bottom: 5%;">
+                        <span>&#10004;</span>Code source:
+                        <div><embed src="page_inscrip.txt" width="400px" height="400px" type=""></div>
+                    </div>
+                    
+                </div>
+            </p>
+                
+             Pour la partie Back-End -->
+            <!--<p>
+                <div><ul><span>&#9733;</span><u>Partie Back-End:</ul> </u></div>
+                <div style="padding: 5%;">
+                    -<u>Base de donnée</u>  
+                    <div style="align-items: center; margin-bottom: 5%;">
+                        <span>&#10004;</span>Code source: 
+                        <div><embed src="base_de_donne.txt" width="400px" height="400px" type=""></div>
+                    </div>
+    
+
+                    
+                </div>
+            </p> -->
+        </P>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <style>
+        body {
+            background-image: url("/static/amoureux.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .form-group {
+            width: 45%;
+            font-size: 20px
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .form-group {
+                width: 100%;
+            }
+        }
+    </style>
+    <h1>Mettre à jour vos préférences</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-container">
+            <div class="form-group">
+                <label for="sport">Sport :</label>
+                {{ form.sport }}
+            </div>
+            <div class="form-group">
+                <label for="id_musique">Musique :</label>
+                {{ form.musique }}
+            </div>
+            <div class="form-group">
+                <label for="id_cinema">Cinema :</label>
+                {{ form.cinema }}
+            </div>
+            <div class="form-group">
+                <label for="id_voyage">Voyage :</label>
+                {{ form.voyage }}
+            </div>
+            <div class="form-group">
+                <label for="id_technologie">Technologie :</label>
+                {{ form.technologie }}
+            </div>
+            <div class="form-group">
+                <label for="id_lecture">Lecture :</label>
+                {{ form.lecture }}
+            </div>
+        </div>
+        <div class="button-group">
+            <button type="submit">Enregistrer</button>
+        </div>
+    </form>
+
+    <div class="footer">
+        <button>Continuer</button>
+    </div>
+{% endblock %}
+

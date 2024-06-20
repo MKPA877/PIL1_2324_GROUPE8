@@ -1,0 +1,93 @@
+class Utilisateur(AbstractUser):
+    photo_de_profil = models.URLField(max_length=200, blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    sexe = models.CharField(max_length=10, choices=[('Homme', 'Homme'), ('Femme', 'Femme'), ('Autre', 'Autre')])
+    date_de_naissance = models.DateField()
+
+    class Meta:
+        verbose_name = 'Utilisateur'
+        verbose_name_plural = 'Utilisateurs'
+
+class Profil(models.Model):
+    utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE)
+    localisation = models.CharField(max_length=255, blank=True, null=True)
+    intérêts = models.TextField(blank=True, null=True)
+    recherche = models.CharField(max_length=50, blank=True, null=True)
+    statut_de_relation = models.CharField(max_length=50, blank=True, null=True)
+    niveau_d_éducation = models.CharField(max_length=50, blank=True, null=True)
+    profession = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Profil'
+        verbose_name_plural = 'Profils'
+
+class Photo(models.Model):
+    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    url_photo = models.URLField(max_length=200)
+    est_photo_de_profil = models.BooleanField(default=False)
+    téléchargée_le = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Photo'
+        verbose_name_plural = 'Photos'
+
+class Message(models.Model):
+    expéditeur = models.ForeignKey(Utilisateur, related_name='messages_envoyés', on_delete=models.CASCADE)
+    destinataire = models.ForeignKey(Utilisateur, related_name='messages_reçus', on_delete=models.CASCADE)
+    contenu_message = models.TextField()
+    envoyé_le = models.DateTimeField(auto_now_add=True)
+    est_lu = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Message'
+        verbose_name_plural = 'Messages'
+
+class Rencontre(models.Model):
+    utilisateur_1 = models.ForeignKey(Utilisateur, related_name='rencontres_initiées', on_delete=models.CASCADE)
+    utilisateur_2 = models.ForeignKey(Utilisateur, related_name='rencontres_reçues', on_delete=models.CASCADE)
+    rencontré_le = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Rencontre'
+        verbose_name_plural = 'Rencontres'
+
+class Aime(models.Model):
+    aimant = models.ForeignKey(Utilisateur, related_name='j_aime', on_delete=models.CASCADE)
+    aimé = models.ForeignKey(Utilisateur, related_name='aimé_par', on_delete=models.CASCADE)
+    aimé_le = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'J'aime'
+        verbose_name_plural = 'J'aimes'
+
+class Visite(models.Model):
+    visiteur = models.ForeignKey(Utilisateur, related_name='visites_faites', on_delete=models.CASCADE)
+    visité = models.ForeignKey(Utilisateur, related_name='visites_reçues', on_delete=models.CASCADE)
+    visité_le = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Visite'
+        verbose_name_plural = 'Visites'
+
+class Blocage(models.Model):
+    bloqueur = models.ForeignKey(Utilisateur, related_name='blocages_faits', on_delete=models.CASCADE)
+    bloqué = models.ForeignKey(Utilisateur, related_name='bloqué_par', on_delete=models.CASCADE)
+    bloqué_le = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Blocage'
+        verbose_name_plural = 'Blocages'
+
+class Signalement(models.Model):
+    signaleur = models.ForeignKey(Utilisateur, related_name='signalements_faits', on_delete=models.CASCADE)
+    signalé = models.ForeignKey(Utilisateur, related_name='signalé_par', on_delete=models.CASCADE)
+    raison_signalement = models.TextField()
+    signalé_le = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Signalement'
+        verbose_name_plural = 'Signalements'
+
+class Paramètre(models.Model):
+    utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE)
+    préférences_de_notificati
