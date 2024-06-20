@@ -10,6 +10,24 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4CAF50;
+    padding: 10px;
+  }
+
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .navbar a:hover {
+    background-color: #45a049;
+  }
 
   form {
     margin-bottom: 20px;
@@ -58,6 +76,12 @@
   }
 
 </style>
+<nav class="navbar">
+  <a href="{% url 'conversations_view' %}">Salle des Discussions</a>
+  <a href="{% url 'compatible_profils' %}">Profils Compatibles</a>
+  <a href="{% url 'notification_list' %}">Notifications</a>
+</nav>
+
 <div class="container">
   <form method="post" enctype="multipart/form-data" action="{% url 'upload_profile_picture' %}">
     {% csrf_token %}

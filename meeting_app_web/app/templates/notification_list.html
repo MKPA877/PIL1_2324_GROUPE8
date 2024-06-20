@@ -2,14 +2,16 @@
 
 {% block content %}
 
+<!-- Bootstrap CSS CDN -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 <style>
-  /* Style pour les listes */
+  /* Custom styles */
   ul {
     list-style-type: none;
     padding: 0;
   }
 
-  /* Style pour chaque élément de liste */
   li {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -18,8 +20,7 @@
     border-radius: 5px;
   }
 
-  /* Style pour le lien "Accepter" */
-  a {
+  .accept-link {
     color: #fff;
     background-color: #4CAF50;
     padding: 5px 10px;
@@ -27,31 +28,57 @@
     border-radius: 3px;
   }
 
-  a:hover {
+  .accept-link:hover {
     background-color: #45a049;
   }
-
 </style>
 
-<h2>Demandes d'invitations reçues</h2>
-<ul>
-  {% for invitation in received_invitations %}
-    <li>
-      {{ invitation.sender.username }}
-      <a href="{% url 'accept_invitation' invitation.id %}" class="accept-link">Accepter</a>
-    </li>
-  {% empty %}
-    <li>Aucune invitation reçue</li>
-  {% endfor %}
-</ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Meeting App</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'conversations_view' %}">Salle des discussions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'compatible_profils' %}">Profils compatibles</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'gest_profil' %}">Modifier le profil</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-<h2>Demandes d'invitations envoyées</h2>
-<ul>
-  {% for invitation in sent_invitations %}
-    <li>{{ invitation.receiver.username }} (En attente)</li>
-  {% empty %}
-    <li>Aucune invitation envoyée</li>
-  {% endfor %}
-</ul>
+<div class="container mt-4">
+  <h2>Demandes d'invitations reçues</h2>
+  <ul>
+    {% for invitation in received_invitations %}
+      <li>
+        {{ invitation.sender.username }}
+        <a href="{% url 'accept_invitation' invitation.id %}" class="accept-link">Accepter</a>
+      </li>
+    {% empty %}
+      <li>Aucune invitation reçue</li>
+    {% endfor %}
+  </ul>
 
-{% endblock  %}
+  <h2>Demandes d'invitations envoyées</h2>
+  <ul>
+    {% for invitation in sent_invitations %}
+      <li>{{ invitation.receiver.username }} (En attente)</li>
+    {% empty %}
+      <li>Aucune invitation envoyée</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- Bootstrap JS and dependencies (optional) -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJbDJcPHvzdT1H8ro9hK0DHKvx/TsaI/SjUoulLdx5F60Mkwp" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% endblock %}
