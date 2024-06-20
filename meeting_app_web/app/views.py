@@ -156,42 +156,50 @@ def private_chat_redirect(request, username):
 
 @login_required
 def chat_room(request, chat_id):
-    chat = get_object_or_404(PrivateChat, id=chat_id)
-    return render(request, 'chat_room.html', {'chat_id': chat.id})
+    room_name = chat_id
+    # Récupérer la connexion correspondant à la salle de chat spécifiée
+    connection = get_object_or_404(Connection, accepted=True)
+    # Récupérer tous les messages associés à cette connexion
+    messages = Message.objects.filter(connection=connection).order_by('date_envoi')
+    return render(request, 'chat_room.html', {
+        'room_name': room_name,
+        'connection_id': connection.id,  # Passer l'ID de la connexion au template
+        'messages': messages
+    })
 
 
 
 @login_required 
 def upload_profile_picture(request):
-    if request.methode == 'POST':
+    if request.method == 'POST':
         form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            return redirect('upload_profile_picture')
     else:
         form= ProfilePictureForm(instance=request.user)
     return render(request, 'gest_profil.html', {'form': form})
 
 @login_required 
 def change_username(request):
-    if request.methode == 'POST':
+    if request.method == 'POST':
         form = UsernameChangeform(request.POST,instance=request.user)
         if form.is_valid():
             form.save()
             messages.sucess(request, 'Your username has been updated successfully!')
-            return redirect('profile')
+            return redirect('change_username')
         else:
             form = UsernameChangeform(instance=request.user)
         return render(request, 'gest_profil.html', {'form': form}) 
 
 @login_required 
 def change_bio(request):
-    if request.methode == 'POST':
+    if request.method == 'POST':
         form = BioChangeForm(request.POST,instance=request.user)
         if form.is_valid():
             form.save()
             messages.sucess(request, 'Your bio has been updated successfully!')
-            return redirect('profile')
+            return redirect('change_bio')
         else:
             form = BioChangeForm(instance=request.user)
         return render(request, 'gest_profil.html', {'form': form}) 

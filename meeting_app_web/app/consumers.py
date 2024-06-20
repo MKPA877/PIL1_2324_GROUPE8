@@ -1,26 +1,22 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from asgiref.sync import sync_to_async
 from .models import PrivateChat, Message
+from django.contrib.auth import get_user_model
+from django.db import transaction
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.chat_id = self.scope['url_route']['kwargs']['chat_id']
-        user = self.scope['user']
+        self.room_group_name = f'private_chat_{self.chat_id}'
 
-        # Vérifier l'authentification de l'utilisateur et s'il est autorisé à accéder à cette discussion
-        if not user.is_authenticated:
+        try:
+            self.private_chat = await self.get_private_chat()
+        except PrivateChat.DoesNotExist:
             await self.close()
             return
 
-        try:
-            chat = PrivateChat.objects.get(id=self.chat_id)
-            if user != chat.user1 and user != chat.user2:
-                await self.close()
-                return
-        except PrivateChat.DoesNotExist:
-            await self.close()
-
-        self.room_group_name = f'private_chat_{self.chat_id}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
@@ -35,33 +31,74 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.handle_text_message(data)
         elif message_type in ['image', 'audio', 'video']:
             await self.handle_media_message(data)
+        elif message_type == "delete_message":
+            await self.handle_delete_message(data)
 
     async def handle_text_message(self, data):
         message = data['message']
         sender_id = self.scope['user'].id
-        await self.save_message(sender_id, 'text', message)
-        await self.send_message('text', message, sender_id)
+        new_message = await self.save_message(sender_id, 'text', message)
+        await self.send_message_to_group('text', message, sender_id, new_message.id)
 
-    async def handle_media_message(self, data):
-        message_type = data['type']
+    async def handle_text_message(self, data):
         message = data['message']
         sender_id = self.scope['user'].id
-        await self.save_message(sender_id, message_type)
-        await self.send_message(message_type, message, sender_id)
+        new_message = await self.save_message(sender_id, 'text', message)
+        await self.send_message_to_group('text', message, sender_id, new_message.id)
 
-    async def save_message(self, sender_id, message_type, content=None):
-        try:
-            message = Message.objects.create(user_id=sender_id, **{message_type: content})
-            return message
-        except Exception as e:
-            print(f"Error saving message: {e}")
-            return None
 
-    async def send_message(self, message_type, message, sender_id):
-        message_data = {'message_type': message_type, 'message': message, 'sender_id': sender_id}
-        await self.channel_layer.group_send(self.room_group_name, {'type': 'chat.message', **message_data})
+    async def handle_delete_message(self, data):
+        message_id = data['message_id']
+        await self.delete_message(message_id)
+        await self.channel_layer.group_send(
+            self.room_group_name, {
+                "type": "delete_message_event",
+                "message_id": message_id,
+            }
+        )
+
+    @sync_to_async
+    def get_private_chat(self):
+        return PrivateChat.objects.get(id=self.chat_id)
+
+    @sync_to_async
+    def save_message(self, sender_id, message_type, content=None):
+        # Récupérer l'utilisateur de manière asynchrone
+        user = get_user_model().objects.get(pk=sender_id)
+        
+        # Récupérer la connexion privée pour le message
+        private_chat = self.private_chat
+        connection = private_chat.connection  # Utilisez la connexion associée à PrivateChat
+        
+        # Créer un nouveau message avec les données fournies
+        with transaction.atomic():
+            message_data = {
+                'user': user,
+                'connection': connection,  # Utilisez l'instance de Connection ici
+                message_type: content,
+                
+            }
+            new_message = Message.objects.create(**message_data)
+        
+        return new_message
+    
+
+    @sync_to_async
+    def delete_message(self, message_id):
+        Message.objects.filter(id=message_id).delete()
+
+    async def send_message_to_group(self, message_type, message, sender_id, message_id):
+        message_data = {
+            'type': 'chat_message',
+            'message_type': message_type,
+            'message': message,
+            'sender_id': sender_id,
+            'message_id': message_id
+        }
+        await self.channel_layer.group_send(self.room_group_name, message_data)
 
     async def chat_message(self, event):
-        message = event['message']
-        sender_id = event['sender_id']
-        await self.send(text_data=json.dumps({'message': message, 'sender_id': sender_id}))
+        await self.send(text_data=json.dumps(event))
+
+    async def delete_message_event(self, event):
+        await self.send(text_data=json.dumps(event))

@@ -2,10 +2,44 @@
 
 {% block content %}
 
+<style>
+  /* Style pour les listes */
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  /* Style pour chaque élément de liste */
+  li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  /* Style pour le lien "Accepter" */
+  a {
+    color: #fff;
+    background-color: #4CAF50;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 3px;
+  }
+
+  a:hover {
+    background-color: #45a049;
+  }
+
+</style>
+
 <h2>Demandes d'invitations reçues</h2>
 <ul>
   {% for invitation in received_invitations %}
-    <li>{{ invitation.sender.username }} <a href="{% url 'accept_invitation' invitation.id %}">Accepter</a></li>
+    <li>
+      {{ invitation.sender.username }}
+      <a href="{% url 'accept_invitation' invitation.id %}" class="accept-link">Accepter</a>
+    </li>
   {% empty %}
     <li>Aucune invitation reçue</li>
   {% endfor %}

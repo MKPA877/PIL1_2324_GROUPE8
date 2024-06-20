@@ -63,3 +63,9 @@ class BioChangeForm(forms.ModelForm):
         widgets = {
             'bio': forms.Textarea(attrs={'class':'form-control', 'row':3}),
         }
+
+
+"""class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['text', 'image', 'video', 'document', 'audio']"""

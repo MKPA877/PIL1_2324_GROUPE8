@@ -20,4 +20,6 @@ urlpatterns = [
     path('gest_profil/', go_to_gest_profil, name='gest_profil'),
     path('conversations/', conversations_view, name='conversations_view'),
     path('private_chat/<str:username>/', private_chat_redirect, name='private_chat_redirect'),
+    path('ws/room/<int:chat_id>/', chat_room, name='chat_room'),
+    path('logout/', conversations_view, name='logout')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

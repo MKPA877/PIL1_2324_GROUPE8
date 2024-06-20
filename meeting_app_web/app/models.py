@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.text import slugify
 
 
 class User(AbstractUser):
@@ -94,7 +95,7 @@ class Friendship(models.Model):
 
 
 class PrivateChat(models.Model):
-    connection = models.OneToOneField(Connection, related_name='chat', on_delete=models.CASCADE, null=True, blank=True)
+    connection = models.OneToOneField(Connection, related_name='chat', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

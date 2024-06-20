@@ -1,32 +1,91 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  form {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+
+  textarea.form-control {
+    height: 120px;
+  }
+
+  .btn-primary {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .btn-primary:hover {
+    background-color: #45a049;
+  }
+
+  /* Media query pour ajuster la largeur du formulaire sur les petits écrans */
+  @media (max-width: 768px) {
+    .container {
+      width: 90%;
+    }
+  }
+
+</style>
 <div class="container">
   <form method="post" enctype="multipart/form-data" action="{% url 'upload_profile_picture' %}">
     {% csrf_token %}
     <h2>Gestion du Profil</h2>
-    <div class="input-container">
-      <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
-      <label for="profile_picture">Photo de Profil</label>
+    <div class="mb-3">
+      <label for="profile_picture" class="form-label">Photo de Profil</label>
+      <input class="form-control" type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
     </div>
-    <button type="submit">Changer la photo de profil</button>
+    <button type="submit" class="btn btn-primary">Changer la photo de profil</button>
   </form>
 
   <form method="post" action="{% url 'change_username' %}">
     {% csrf_token %}
-    <div class="input-container">
-      <input type="text" id="username" name="username" value="{{ request.user.username }}" required>
-      <label for="username">Nom d'utilisateur</label>
+    <div class="mb-3">
+      <label for="username" class="form-label">Nom d'utilisateur</label>
+      <input type="text" class="form-control" id="username" name="username" value="{{ request.user.username }}" required>
     </div>
-    <button type="submit">Changer le nom d'utilisateur</button>
+    <button type="submit" class="btn btn-primary">Changer le nom d'utilisateur</button>
   </form>
 
   <form method="post" action="{% url 'change_bio' %}">
     {% csrf_token %}
-    <div class="input-container">
-      <textarea id="bio" name="bio" required>{{ request.user.bio }}</textarea>
-      <label for="bio">Biographie</label>
+    <div class="mb-3">
+      <label for="bio" class="form-label">Biographie</label>
+      <textarea class="form-control" id="bio" name="bio" required>{{ request.user.bio }}</textarea>
     </div>
-    <button type="submit">Modifier la biographie</button>
+    <button type="submit" class="btn btn-primary">Modifier la biographie</button>
   </form>
 </div>
 {% endblock %}
+

@@ -26,3 +26,8 @@ class FriendshipAdmin(admin.ModelAdmin):
 class PrivateChatAdmin(admin.ModelAdmin):
     list_display = ('connection', 'created_at')
 
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'created_at')
+
